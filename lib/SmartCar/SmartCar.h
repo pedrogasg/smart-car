@@ -1,6 +1,6 @@
-#ifndef SMARTCAR_HBRIDGE_CONTROLLER_H
-#define SMARTCAR_HBRIDGE_CONTROLLER_H
-namespace h_bridge_controller
+#ifndef SMARTCAR_H
+#define SMARTCAR_H
+namespace smart_car
 {
     class Encoder
     {
@@ -53,7 +53,7 @@ namespace h_bridge_controller
             _input2;
     };
 
-    class HBridgeController
+    class SmartCar
     {
     private:
         void
@@ -61,8 +61,8 @@ namespace h_bridge_controller
             setEncoder(int encoder);
         /* data */
     public:
-        HBridgeController(/* args */);
-        ~HBridgeController() = default;
+        SmartCar(/* args */);
+        ~SmartCar() = default;
 
         void
             setLeftEncoder(int leftEncoder),

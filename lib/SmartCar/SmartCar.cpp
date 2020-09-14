@@ -1,8 +1,8 @@
-#include "HBridgeController.h"
+#include "SmartCar.h"
 
 #include <Arduino.h>
 
-namespace h_bridge_controller
+namespace smart_car
 {
     void Motor::setup(int enable, int input1, int input2)
     {

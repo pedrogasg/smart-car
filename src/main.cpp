@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <HBridgeController.h>
+#include <SmartCar.h>
 
 #define OUTPUT_MIN 180
 #define OUTPUT_MAX 255
@@ -13,16 +13,33 @@ int speed1, speed2;
 int output_bits = 8;
 bool output_signed = false;
 
-h_bridge_controller::Motor* leftMotor  = new h_bridge_controller::Motor();
-h_bridge_controller::Motor* rigthMotor  = new h_bridge_controller::Motor();
+int voltage = 155;
+int aceletation = 0;
 
-h_bridge_controller::Encoder* leftEncoder = new h_bridge_controller::Encoder();
-h_bridge_controller::Encoder* rigthEncoder = new h_bridge_controller::Encoder();
+int error;
+float Kp = 1.0;
+int setPoint;
+
+
+smart_car::Motor* leftMotor  = new smart_car::Motor();
+smart_car::Motor* rigthMotor  = new smart_car::Motor();
+
+smart_car::Encoder* leftEncoder = new smart_car::Encoder();
+smart_car::Encoder* rigthEncoder = new smart_car::Encoder();
 
 IntervalTimer myTimer;
 
 void ISR_timerone(void)
 {
+  error = setPoint - speed1;
+  int increment = 0;
+  if(error > 0){
+    increment = Kp * error;
+    if(increment > 100){
+      increment = 100;
+    }
+  }
+  aceletation += increment;
   speed1 = leftEncoder->lap();
   speed2 = rigthEncoder->lap();
   Serial.print("Motor Speed 1: ");
@@ -54,11 +71,11 @@ void loop()
 {
   if (Serial.available())
   {
-    int speed = Serial.parseInt();
-    if (speed >= 189 && speed <= 255)
+    setPoint = Serial.parseInt();
+    if (setPoint >= 189 && setPoint <= 255)
     {
-      leftMotor->setVoltage(speed, false);
-      rigthMotor->setVoltage(speed, false);
+      leftMotor->setVoltage(voltage + aceletation, false);
+      rigthMotor->setVoltage(0, false);
     }
 
   }
