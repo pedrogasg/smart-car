@@ -20,7 +20,7 @@ namespace smart_car
     private:
         unsigned int 
             _delay,
-            _counter;
+            _counter = 0;
 
         unsigned long 
             _last = 0,
